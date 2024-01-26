@@ -1,8 +1,18 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "./components/theme-provider";
+import { Login } from "./pages/auth/login";
+import { Toaster } from "./components/ui/toaster";
+
 function App() {
   return (
-    <>
-      <h1>Hello World</h1>
-    </>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Toaster />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
