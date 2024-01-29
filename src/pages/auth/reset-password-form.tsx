@@ -17,56 +17,105 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useResetPasswordMutate } from "@/hooks/useResetPasswordMutate";
+import { useResetPasswordTokenData } from "@/hooks/useResetPasswordData";
+import { useUpdateUserMutate } from "@/hooks/useUpdateUserMutate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import * as z from "zod";
 
-export interface IResetPasswordForm {
-  email: string;
+export interface IResetPasswordFormTokenRequest {
+  token: string | undefined;
 }
 
-interface IResetPasswordFormResponse {
+export interface IResetPasswordFormReset {
+  password: string;
+  rePassword: string;
+}
+
+export interface IResetPasswordFormTokenResponse {
+  token: string;
+  userId: string;
+  isValid: boolean;
+}
+
+interface IResetPasswordFormResetResponse {
   data: {
     message: string;
   };
 }
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .email({
-      message: "Email inválido",
-    })
-    .max(255, {
-      message: "Email tem no máximo 255 caracteres.",
-    }),
-});
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: "Senha precisa ter pelo menos 8 caracteres.",
+      })
+      .max(255, {
+        message: "Senha tem no máximo 255 caracteres.",
+      }),
+    rePassword: z
+      .string()
+      .min(8, {
+        message: "Redigitação precisa ter pelo menos 8 caracteres.",
+      })
+      .max(255, {
+        message: "Redigitação tem no máximo 255 caracteres.",
+      }),
+  })
+  .refine((data) => {
+    return (
+      data.password === data.rePassword,
+      {
+        message: "As senhas não coincidem",
+      }
+    );
+  });
 
-export const ResetPassword = () => {
-  const { mutate, isPending } = useResetPasswordMutate();
+export const ResetPasswordForm = () => {
+  const { token } = useParams();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const { data: resetPasswordData } = useResetPasswordTokenData({ token });
+  const { mutate, isPending } = useUpdateUserMutate();
+
+  if (resetPasswordData === undefined || resetPasswordData?.isValid === false) {
+    toast({
+      title: "Token inválido",
+      description: "Faça a requisição de um token válido",
+      variant: "destructive",
+    });
+    navigate("/reset-password");
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      rePassword: "",
     },
   });
 
   function handleSubmitResetPasswordForm(values: z.infer<typeof formSchema>) {
-    mutate(values, {
-      onSuccess: (data: IResetPasswordFormResponse) => {
+    const updatedValues = {
+      ...values,
+      id: resetPasswordData?.userId,
+    };
+
+    mutate(updatedValues, {
+      onSuccess: (data: IResetPasswordFormResetResponse) => {
         toast({
           title: data.data.message,
         });
         form.reset({
-          email: "",
+          password: "",
+          rePassword: "",
         });
+        navigate("/");
       },
       onError: (error) => {
         const err = error as AxiosError;
@@ -80,13 +129,13 @@ export const ResetPassword = () => {
           const errorMessage = err.response.data.error;
 
           toast({
-            title: "Erro na submissão",
+            title: "Erro na atualização",
             description: errorMessage as ReactNode,
             variant: "destructive",
           });
         } else {
           toast({
-            title: "Erro na submissão",
+            title: "Erro na atualização",
             description: "Erro desconhecido ao processar a solicitação.",
             variant: "destructive",
           });
@@ -103,11 +152,6 @@ export const ResetPassword = () => {
         </section>
         <div className="mt-4 h-full flex items-center justify-center">
           <Card className="w-1/4">
-            <div className="p-4">
-              <Button variant={"outline"} onClick={() => navigate("/")}>
-                Voltar
-              </Button>
-            </div>
             <CardHeader className="p-4">
               <CardTitle className="text-xl font-semibold">
                 Reset de senha
@@ -123,14 +167,33 @@ export const ResetPassword = () => {
                 >
                   <FormField
                     control={form.control}
-                    name="email"
+                    name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Senha</FormLabel>
                         <FormControl>
                           <Input
                             className="w-full border p-2 rounded-md"
-                            placeholder="Digite seu email"
+                            placeholder="Digite sua senha"
+                            type="password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="rePassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Redigitar senha</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="w-full border p-2 rounded-md"
+                            placeholder="Redigite sua senha"
+                            type="password"
                             {...field}
                           />
                         </FormControl>
