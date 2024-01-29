@@ -164,12 +164,21 @@ export const Login = () => {
                       </FormItem>
                     )}
                   />
+                  <a
+                    href="/reset-password"
+                    className="text-blue-500 hover:underline text-sm mt-4 block"
+                  >
+                    Esqueci a senha
+                  </a>
                   {isPending ? (
                     <Button className="py-2 px-4 rounded-md" disabled>
                       Carregando
                     </Button>
                   ) : (
-                    <Button type="submit" className="py-2 px-4 rounded-md">
+                    <Button
+                      type="submit"
+                      className="py-2 px-4 rounded-md w-full"
+                    >
                       Logar
                     </Button>
                   )}
@@ -181,15 +190,6 @@ export const Login = () => {
                       className="text-blue-500 hover:underline"
                     >
                       Clique aqui para cadastrar
-                    </a>
-                  </p>
-                  <p className="text-sm mt-4">
-                    Não lembra sua senha?{" "}
-                    <a
-                      href="/reset-password"
-                      className="text-blue-500 hover:underline"
-                    >
-                      Clique aqui para resetar
                     </a>
                   </p>
                 </form>
