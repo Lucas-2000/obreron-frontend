@@ -147,7 +147,7 @@ export const Register = () => {
         <div className="mt-4 h-full flex items-center justify-center">
           <Card className="w-1/4">
             <div className="p-4">
-              <Button variant={"outline"} onClick={() => window.history.back()}>
+              <Button variant={"outline"} onClick={() => navigate("/")}>
                 Voltar
               </Button>
             </div>
