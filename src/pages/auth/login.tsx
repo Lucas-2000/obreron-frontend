@@ -24,6 +24,7 @@ import { useLoginMutate } from "@/hooks/useLoginMutate";
 import { useToast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
 import { ReactNode } from "react";
+import { useNavigate } from "react-router";
 
 export interface ILoginForm {
   username: string;
@@ -58,6 +59,7 @@ const formSchema = z.object({
 export const Login = () => {
   const { mutate, isPending } = useLoginMutate();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,6 +75,11 @@ export const Login = () => {
         if (data.data.token) {
           localStorage.setItem("token", data.data.token);
         }
+        toast({
+          title: "Bem vindo",
+          description: `Seja bem vindo ao Obreron: ${values.username}`,
+        });
+        navigate("/app/dashboard");
       },
       onError: (error) => {
         const err = error as AxiosError;

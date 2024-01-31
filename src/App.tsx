@@ -5,6 +5,7 @@ import { Toaster } from "./components/ui/toaster";
 import { Register } from "./pages/auth/register";
 import { ResetPassword } from "./pages/auth/reset-password";
 import { ResetPasswordForm } from "./pages/auth/reset-password-form";
+import { Dashboard } from "./pages/app/dashboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             path="/reset-password/:token"
             element={<ResetPasswordForm />}
           />
+          <Route path="/app/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
