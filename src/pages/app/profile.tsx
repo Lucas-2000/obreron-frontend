@@ -1,3 +1,4 @@
+import { DeleteAccountModal } from "@/components/delete-account-modal";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import {
@@ -170,11 +171,27 @@ export const Profile = () => {
                     </Button>
                   ) : (
                     <Button type="submit" className="py-2 px-4 rounded-md">
-                      Enviar
+                      Salvar
                     </Button>
                   )}
                 </form>
               </Form>
+            </CardContent>
+          </Card>
+        </div>
+        <hr className="mt-4 b-4" />
+        <div className="mt-4 h-full flex items-center justify-center">
+          <Card className="w-1/4">
+            <CardHeader className="p-4">
+              <CardTitle className="text-xl font-semibold">
+                Deletar conta
+              </CardTitle>
+              <CardDescription>
+                Clique no botão abaixo para deletar sua conta
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4">
+              <DeleteAccountModal />
             </CardContent>
           </Card>
         </div>
