@@ -21,10 +21,13 @@ import { useTheme } from "./theme-provider";
 import { Button } from "./ui/button";
 import { RestaurantModal } from "./restaurant-modal";
 import { useUserData } from "@/hooks/useUserData";
+import { useTokenValidation } from "@/hooks/useTokenValidation";
 
 export const Header = () => {
   const { theme } = useTheme();
   const { data } = useUserData();
+
+  useTokenValidation();
 
   function handleExit() {
     localStorage.removeItem("token");
