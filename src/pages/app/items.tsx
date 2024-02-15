@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useItemsData } from "@/hooks/useItemsData";
+import { truncateText } from "@/utils/truncate-text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
@@ -46,13 +47,6 @@ export const Items = () => {
 
   let { data: itemsData } = useItemsData(name);
   const { isPending } = useItemsData(name);
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength - 3) + "...";
-    }
-    return text;
-  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
