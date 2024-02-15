@@ -63,11 +63,11 @@ export const Header = () => {
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
                   <Link
-                    to="/app/products"
+                    to="/app/items"
                     className="flex justify-center items-center gap-2"
                   >
                     <ShoppingCart size={20} />
-                    Produtos
+                    Itens
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

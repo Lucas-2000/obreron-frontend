@@ -178,7 +178,7 @@ export const Login = () => {
                     Esqueci a senha
                   </a>
                   {isPending ? (
-                    <Button className="py-2 px-4 rounded-md" disabled>
+                    <Button className="py-2 px-4 rounded-md w-full" disabled>
                       Carregando
                     </Button>
                   ) : (
