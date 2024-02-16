@@ -8,6 +8,7 @@ import { ResetPasswordForm } from "./pages/auth/reset-password-form";
 import { Dashboard } from "./pages/app/dashboard";
 import { Profile } from "./pages/app/profile";
 import { Items } from "./pages/app/items";
+import { Customers } from "./pages/app/customers";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/app/dashboard" element={<Dashboard />} />
           <Route path="/app/profile" element={<Profile />} />
           <Route path="/app/items" element={<Items />} />
+          <Route path="/app/customers" element={<Customers />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
